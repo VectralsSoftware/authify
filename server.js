@@ -1,12 +1,47 @@
 import "dotenv/config"
 import express from 'express'
+import cookieParser from "cookie-parser"
+import cors from "cors"
 import { networkInterfaces } from 'os'
+import { errorMessages } from "./helpers/index.js"
 
 // Connect DB
 import './database/connect.js'
 
+// Routes
+import { authRouter } from "./routes/index.js"
+
 // Initializing express
 const app = express()
+
+// CORS configuration
+const whitelistDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
+app.use(cors({
+  origin: (origin, callback) => {
+    if (whitelistDomains.includes(origin)) {
+      return callback(null, origin)
+    }
+
+    // Only for dev purposes
+    if (process.env.ENVIRONMENT === 'development') {
+      if (!origin || whitelistDomains.includes(origin)) {
+        return callback(null, origin)
+      }
+    }
+
+    // Returns an error if any resource is trying to be accessed from unauthorized domains
+    return callback(errorMessages.corsError(origin))
+  }
+}))
+
+// Accepting json requests
+app.use(express.json())
+
+// Accepting cookies
+app.use(cookieParser())
+
+// Routes
+app.use('/auth', authRouter)
 
 //====== Initialize the server with localhost and ip address check ======//
 const nets = networkInterfaces();
