@@ -13,6 +13,8 @@ const jwtErrors = {
     ["jwt expired"]: 'El token proporcionado ha expirado',
     ["invalid token"]: 'El token no existe o el formato del token no es válido. Autorización denegada',
     ["jwt malformed"]: 'El token no existe o el formato del token no es válido. Autorización denegada',
+    ["jwt unexisting"]: 'No se ha proporcionado un token',
+
 }
 
 export {

@@ -2,6 +2,7 @@ import { errorMessages, jwtErrors } from "../helpers/index.js"
 import { generateRefreshToken, generateToken } from "../helpers/tokenGenerator.js"
 import { UserService } from "../services/userService.js"
 import { ProfileService } from "../services/profileService.js"
+import jwt from "jsonwebtoken"
 
 const register = async (req, res) => {
 
@@ -136,6 +137,36 @@ const authWithProvider = async (req, res) => {
      return res.redirect(`${process.env.CLIENT_URL}/google?accessToken=${token}`)
 }
 
+// This function is mainly used for authenticating a user after social login with oAuth providers
+const loginWithAccessToken = async (req, res) => {
+    try {
+
+        // Get the token sent in the body of the request
+        const {accessToken} = req.body
+
+        // If the token is not specified in the authorization header:
+        if (!accessToken) {
+            throw new Error('invalid token')
+        }
+
+        // Check the token is valid
+        const payload = jwt.verify(accessToken, process.env.JWT_SECRET)
+
+        // Generate JWT
+        const { token, expiresIn } = generateToken(payload.userId)
+
+        // Generate REFRESH JWT
+        generateRefreshToken(payload.userId, res)
+
+        // Send token as response
+        return res.json({ token, expiresIn })
+       
+    } catch (error) {
+        console.log(error);
+        return res.status(401).json({ error: jwtErrors[error.message] })
+    }
+}
+
 const logout = (req, res) => {
     res.clearCookie('refreshToken')
     return res.json({ ok: 'User logged out. Cookies cleared' })
@@ -147,5 +178,6 @@ export {
     getProtectedInfoExample,
     refreshToken,
     authWithProvider,
+    loginWithAccessToken,
     logout
 }

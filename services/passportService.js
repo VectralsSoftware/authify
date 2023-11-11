@@ -1,4 +1,3 @@
-import "dotenv/config"
 import passport from 'passport';
 import Google from 'passport-google-oauth20'
 import Github from 'passport-github2'

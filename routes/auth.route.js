@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authWithProvider, getProtectedInfoExample, login, logout, refreshToken, register } from "../controllers/auth.controller.js";
+import { authWithProvider, getProtectedInfoExample, login, loginWithAccessToken, logout, refreshToken, register } from "../controllers/auth.controller.js";
 import { validationResultMiddleware, validateAuthToken, validateAuthRefreshToken } from "../middlewares/index.js";
 import { bodyValidators } from "../helpers/index.js";
 import passport from "passport";
@@ -22,6 +22,14 @@ router.post('/login',
     bodyValidators.credentials,
     validationResultMiddleware,
     login)
+
+// @route   POST /auth/token/login
+// @access  PUBLIC
+// @desc  Logs in a user and also sets the refresh token in a HTTP-Only Cookie
+router.post('/token/login',
+bodyValidators.token,
+validationResultMiddleware,
+loginWithAccessToken)
 
 // @route   GET /auth/protectedRoute
 // @access  PRIVATE

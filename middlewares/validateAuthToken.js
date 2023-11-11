@@ -13,7 +13,7 @@ const validateAuthToken = (req, res, next) => {
             throw new Error('invalid token')
         }
 
-        // If the token is not valid
+        // Check if the token is not valid
         const token = bearerToken.split(' ')[1] // Separate the token from the "Bearer" word
         const payload = jwt.verify(token, process.env.JWT_SECRET)
 

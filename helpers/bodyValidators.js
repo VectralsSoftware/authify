@@ -1,5 +1,5 @@
 import { body } from "express-validator"
-import { errorMessages } from "./strings.js"
+import { errorMessages, jwtErrors } from "./strings.js"
 
 const credentials = [
     body('email', errorMessages.invalidEmail)
@@ -11,7 +11,13 @@ const credentials = [
         .isLength({ min: '8' })
 ]
 
+const token = [
+    body('accessToken', jwtErrors["jwt unexisting"])
+        .exists()
+]
+
 export const bodyValidators = {
     credentials,
+    token
 }
 
