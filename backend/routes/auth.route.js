@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { getProtectedInfoExample, login, logout, refreshToken, register } from "../controllers/auth.controller.js";
+import { authWithProvider, getProtectedInfoExample, login, logout, refreshToken, register } from "../controllers/auth.controller.js";
 import { validationResultMiddleware, validateAuthToken, validateAuthRefreshToken } from "../middlewares/index.js";
 import { bodyValidators } from "../helpers/index.js";
+import passport from "passport";
 
 const router = Router()
+const CLIENT_URL_SUCCESS = "http://localhost:3000/success";
+const CLIENT_URL_FAILURE = "http://localhost:3000/fail";
 
 // @route   POST /auth/register
 // @access  PUBLIC
@@ -32,6 +35,23 @@ router.get('/protectedRoute',
 router.get('/refreshToken',
     [validateAuthRefreshToken],
     refreshToken)
+
+// @route   GET /auth/google
+// @access  PUBLIC
+// @desc Google Auth flow starts here - Redirect the user to the Google authentication page
+router.get('/google', passport.authenticate("google", { scope: ["email", "profile", "openid"] }));
+
+// @route   GET /auth/google/callback
+// @access  PUBLIC
+// @desc  Authenticates user with Google oAuth Provider after the user has granted permission
+router.get(
+    "/google/callback",
+    passport.authenticate("google", {
+        failureRedirect: CLIENT_URL_FAILURE,
+    }),
+    authWithProvider
+);
+
 
 // @route   GET /auth/logout
 // @access  PRIVATE (needs the refresh token from the cookies)

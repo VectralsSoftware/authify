@@ -14,6 +14,20 @@ import { authRouter } from "./routes/index.js"
 // Initializing express
 const app = express()
 
+// Passport login sessions require session support
+/* app.use(
+  cookieSession({ name: "session", keys: ["authify"], maxAge: 24 * 60 * 60 * 100 })
+); */
+
+// Use Passport.js for authentication with oAuth providers
+import passport from "passport"
+import "./services/passportService.js"
+app.use(passport.initialize());
+//app.use(passport.session());
+
+
+console.log(process.env.GOOGLE_AUTH_CALLBACK_URL);
+
 // CORS configuration
 const whitelistDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
 app.use(cors({
@@ -31,7 +45,8 @@ app.use(cors({
 
     // Returns an error if any resource is trying to be accessed from unauthorized domains
     return callback(errorMessages.corsError(origin))
-  }
+  },
+  credentials: true
 }))
 
 // Accepting json requests

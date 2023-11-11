@@ -3,6 +3,13 @@ import bcryptjs from 'bcryptjs'
 import { errorMessages } from "../helpers/strings.js";
 
 const userSchema = new Schema({
+    username: {
+        type: String,
+        trim: true, //Delete spaces in the beggining and end of the string,
+        unique: true, //Prevent users from using an username twice,
+        lowercase: true,
+        index: { unique: true }
+    },
     email: {
         type: String,
         required: true,
@@ -12,9 +19,15 @@ const userSchema = new Schema({
         index: { unique: true }
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
+    email_verified: {
+        type: Boolean,
+        default: false
+    },
+    providers: {
+        type: [],
+    }
 })
 
 // This is executed before saving a user
@@ -25,9 +38,14 @@ userSchema.pre("save", async function (next) {
     if (!user.isModified("password")) return next();
 
     try {
-        const salt = await bcryptjs.genSalt(10);
-        user.password = await bcryptjs.hash(user.password, salt);
-        next();
+        // If user does not provide a password because its authenticating with oAuth providers
+        if (!user.password) {
+            next()
+        } else {
+            const salt = await bcryptjs.genSalt(10);
+            user.password = await bcryptjs.hash(user.password, salt);
+            next();
+        }
     } catch (error) {
         console.log(error);
         throw new Error(errorMessages.passwordHash);
@@ -35,7 +53,12 @@ userSchema.pre("save", async function (next) {
 });
 
 // Method used to compare input password with hashed password
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
+
+    if (!this.password) {
+        return false
+    }
+
     return await bcryptjs.compare(candidatePassword, this.password)
 }
 
