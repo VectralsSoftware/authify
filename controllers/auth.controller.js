@@ -12,12 +12,12 @@ const register = async (req, res) => {
         const { email, password } = req.body
 
         // Create the user
-        const user = await UserService.createUser({ 
+        const user = await UserService.createUser({
             email,
             password,
             username: await UserService.generateUsername(),
             providers: ['credentials']
-         })
+        })
 
         // Generate JWT
         const { token, expiresIn } = generateToken(user._id)
@@ -100,8 +100,10 @@ const refreshToken = async (req, res) => {
 
 const authWithProvider = async (req, res) => {
 
+    console.log(req.user);
+    console.log(req.user.profile);
     // Get the simplified json data from the oAuth response
-    const { _json, provider } = req.user?.profile
+    const { _json, provider } = req.user?.profile || req.user
 
     // Check if user with email already exists
     const userExists = await UserService.findByEmail(_json.email)
@@ -125,16 +127,17 @@ const authWithProvider = async (req, res) => {
     // Complete the profile or create a new one with the info comming from oAuth Provider
     const profile = await ProfileService.createOrUpdateProfile({
         user: user._id,
+        fullName: _json.name,
         given_name: _json.given_name,
         family_name: _json.family_name,
         picture: _json.picture
     })
 
-     // Generate JWT
-     const { token } = generateToken(user._id)
+    // Generate JWT
+    const { token } = generateToken(user._id)
 
-     // Send token as response in the frontend url. (Handling login logic from frontend is necessary)
-     return res.redirect(`${process.env.CLIENT_URL}/google?accessToken=${token}`)
+    // Send token as response in the frontend url. (Handling login logic from frontend is necessary)
+    return res.redirect(`${process.env.CLIENT_URL}/google?accessToken=${token}`)
 }
 
 // This function is mainly used for authenticating a user after social login with oAuth providers
@@ -142,7 +145,7 @@ const loginWithAccessToken = async (req, res) => {
     try {
 
         // Get the token sent in the body of the request
-        const {accessToken} = req.body
+        const { accessToken } = req.body
 
         // If the token is not specified in the authorization header:
         if (!accessToken) {
@@ -160,7 +163,7 @@ const loginWithAccessToken = async (req, res) => {
 
         // Send token as response
         return res.json({ token, expiresIn })
-       
+
     } catch (error) {
         console.log(error);
         return res.status(401).json({ error: jwtErrors[error.message] })

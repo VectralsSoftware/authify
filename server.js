@@ -25,9 +25,6 @@ import "./services/passportService.js"
 app.use(passport.initialize());
 //app.use(passport.session());
 
-
-console.log(process.env.GOOGLE_AUTH_CALLBACK_URL);
-
 // CORS configuration
 const whitelistDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
 app.use(cors({

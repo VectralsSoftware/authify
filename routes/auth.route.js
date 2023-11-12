@@ -5,7 +5,6 @@ import { bodyValidators } from "../helpers/index.js";
 import passport from "passport";
 
 const router = Router()
-const CLIENT_URL_SUCCESS = "http://localhost:3000/success";
 const CLIENT_URL_FAILURE = "http://localhost:3000/fail";
 
 // @route   POST /auth/register
@@ -44,6 +43,10 @@ router.get('/refreshToken',
     [validateAuthRefreshToken],
     refreshToken)
 
+/* ======================================================================================
+    SOCIAL OAUTH PROVIDERS AUTHENTICATION 
+   ====================================================================================== */
+
 // @route   GET /auth/google
 // @access  PUBLIC
 // @desc Google Auth flow starts here - Redirect the user to the Google authentication page
@@ -55,6 +58,22 @@ router.get('/google', passport.authenticate("google", { scope: ["email", "profil
 router.get(
     "/google/callback",
     passport.authenticate("google", {
+        failureRedirect: CLIENT_URL_FAILURE,
+    }),
+    authWithProvider
+);
+
+// @route   GET /auth/facebook
+// @access  PUBLIC
+// @desc Facebook Auth flow starts here - Redirect the user to the Facebook authentication page
+router.get('/facebook', passport.authenticate("facebook"));
+
+// @route   GET /auth/facebook/callback
+// @access  PUBLIC
+// @desc  Authenticates user with Facebook oAuth Provider after the user has granted permission
+router.get(
+    "/facebook/callback",
+    passport.authenticate("facebook", {
         failureRedirect: CLIENT_URL_FAILURE,
     }),
     authWithProvider

@@ -10,6 +10,8 @@ const FACEBOOK_APP_ID = "your id";
 const FACEBOOK_APP_SECRET = "your id";
 
 
+
+
 passport.use(
     new Google.Strategy(
         {
@@ -44,9 +46,9 @@ passport.use(
 passport.use(
     new Facebook.Strategy(
         {
-            clientID: FACEBOOK_APP_ID,
-            clientSecret: FACEBOOK_APP_SECRET,
-            callbackURL: "/auth/facebook/callback",
+            clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
+            clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
+            callbackURL: process.env.FACEBOOK_AUTH_CALLBACK_URL,
         },
         function (accessToken, refreshToken, profile, done) {
             done(null, profile);

@@ -12,11 +12,18 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
         trim: true, //Delete spaces in the beggining and end of the string,
         unique: true, //Prevent users from using an email twice,
         lowercase: true,
-        index: { unique: true }
+        index: { unique: true },
+        // Make required only if user signs with email and password
+        validate: {
+            validator: function (value) {
+                // Email is required only if providers array does not contain specific values
+                return (!this.providers.includes('google') && !this.providers.includes('facebook') && !this.providers.includes('twitter')) ? !!value : true;
+            },
+            message: 'Email is required if providers array does not contain google, facebook, or twitter'
+        }
     },
     password: {
         type: String

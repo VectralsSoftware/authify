@@ -5,13 +5,15 @@ const profileSchema = new Schema({
         type: Schema.Types.ObjectId, // This way we connect a profile with a user based on the user id
         ref: 'User'
     },
-    given_name: {
+    fullName: {
         type: String,
         required: true
     },
+    given_name: {
+        type: String,
+    },
     family_name: {
         type: String,
-        required: true
     },
     picture: {
         type: String,
