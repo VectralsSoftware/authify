@@ -66,7 +66,7 @@ router.get(
 // @route   GET /auth/facebook
 // @access  PUBLIC
 // @desc Facebook Auth flow starts here - Redirect the user to the Facebook authentication page
-router.get('/facebook', passport.authenticate("facebook", {scope: ["email", 'name', 'displayName']}));
+router.get('/facebook', passport.authenticate("facebook", {scope: ["email", 'profile']}));
 
 // @route   GET /auth/facebook/callback
 // @access  PUBLIC
