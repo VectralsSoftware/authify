@@ -130,7 +130,7 @@ const authWithProvider = async (req, res) => {
         fullName: _json.name,
         given_name: _json.given_name,
         family_name: _json.family_name,
-        picture: _json.picture
+        picture: _json.picture.data?.url || _json.picture
     })
 
     // Generate JWT
