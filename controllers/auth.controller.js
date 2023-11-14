@@ -137,7 +137,7 @@ const authWithProvider = async (req, res) => {
     const { token } = generateToken(user._id)
 
     // Send token as response in the frontend url. (Handling login logic from frontend is necessary)
-    return res.redirect(`${process.env.CLIENT_URL}/google?accessToken=${token}`)
+    return res.redirect(`${process.env.CLIENT_URL}/oauth/${provider}?accessToken=${token}`)
 }
 
 // This function is mainly used for authenticating a user after social login with oAuth providers
