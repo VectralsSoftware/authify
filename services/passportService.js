@@ -49,7 +49,7 @@ passport.use(
             clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
             callbackURL: 'https://authify-yb6j.onrender.com/auth/facebook/callback',
-            profileFields: ['email', 'profile', 'public_profile']
+            profileFields: ['email', 'name', 'displayName']
         },
         function (accessToken, refreshToken, profile, done) {
             done(null, profile);
