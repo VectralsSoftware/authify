@@ -48,7 +48,7 @@ passport.use(
         {
             clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
-            callbackURL: 'https://authify-yb6j.onrender.com/auth/facebook/callback',
+            callbackURL: 'http://localhost:4000/auth/facebook/callback',
             profileFields: ['id', 'displayName', 'photos', 'email']
         },
         function (accessToken, refreshToken, profile, done) {

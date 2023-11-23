@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken'
 
 const generateToken = (userId) => {
 
-    const expiresIn = 60 * 15 // Token will expire in 15 minutes
+    // const expiresIn = 60 * 15 // Token will expire in 15 minutes (PROD)
+    const expiresIn = 60 // Token will expire in 60 seconds (DEV)
 
     try {
 
@@ -16,7 +17,8 @@ const generateToken = (userId) => {
 
 const generateRefreshToken = (userId, res) => {
 
-    const expiresIn = 60 * 60 * 24 * 30 // Token will expire in 30 days
+    const expiresIn = 60 * 60 * 24 * 365 // Token will expire in 1 year
+    //const expiresIn = 60 // Token will expire in 1 minute (DEV)
 
     try {
 

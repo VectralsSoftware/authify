@@ -38,6 +38,25 @@ const createOrUpdateProfile = async (profileData) => {
   }
 };
 
+/**
+ * Get a user profile by userId.
+ * @param {string} userId - The user identifier.
+ * @returns {Promise<Object|null>} - A promise that resolves to the user profile or null if not found.
+ */
+const getProfileByUserId = async (userId) => {
+  try {
+    const profile = await Profile.findOne({ user: userId });
+    return profile;
+  } catch (error) {
+    // Log the error or handle it in any appropriate way
+    console.error(`Error fetching profile for userId ${userId}:`, error.message);
+    // Reject the promise with the error
+    return Promise.reject(error);
+  }
+};
+
+
 export const ProfileService = {
   createOrUpdateProfile,
+  getProfileByUserId
 };

@@ -59,13 +59,13 @@ const login = async (req, res) => {
         }
 
         // Generate JWT
-        const { token, expiresIn } = generateToken(user._id)
+        const response = generateToken(user._id)
 
         // Generate REFRESH JWT
         generateRefreshToken(user._id, res)
 
         // Send token as response
-        return res.json({ token, expiresIn })
+        return res.json(response)
 
     } catch (error) {
         console.log(error);
@@ -170,6 +170,19 @@ const loginWithAccessToken = async (req, res) => {
     }
 }
 
+const getLoggedUser = async (req, res) => {
+    try {
+
+        const user = await UserService.findById(req.userId)
+        const profile = await ProfileService.getProfileByUserId(req.userId)
+        return res.json({user, profile})
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: errorMessages.internalServerError })
+    }
+}
+
 const logout = (req, res) => {
     res.clearCookie('refreshToken')
     return res.json({ ok: 'User logged out. Cookies cleared' })
@@ -182,5 +195,6 @@ export {
     refreshToken,
     authWithProvider,
     loginWithAccessToken,
+    getLoggedUser,
     logout
 }
