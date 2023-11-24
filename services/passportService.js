@@ -17,7 +17,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_AUTH_CALLBACK_URL,
+            callbackURL: 'https://authify-yb6j.onrender.com/auth/googlethub/callback',
         },
         function (accessToken, refreshToken, profile, cb) {
             try {
@@ -34,7 +34,7 @@ passport.use(
         {
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "/auth/github/callback",
+            callbackURL: "https://authify-yb6j.onrender.com/auth/github/callback",
         },
         function (accessToken, refreshToken, profile, done) {
             done(null, profile);
@@ -48,7 +48,7 @@ passport.use(
         {
             clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
-            callbackURL: 'http://localhost:4000/auth/facebook/callback',
+            callbackURL: 'https://authify-yb6j.onrender.com/auth/facebook/callback',
             profileFields: ['id', 'displayName', 'photos', 'email']
         },
         function (accessToken, refreshToken, profile, done) {
