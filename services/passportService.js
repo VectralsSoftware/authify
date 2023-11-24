@@ -17,7 +17,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-            callbackURL: 'https://authify-yb6j.onrender.com/auth/googlethub/callback',
+            callbackURL: 'https://authify-yb6j.onrender.com/auth/google/callback',
         },
         function (accessToken, refreshToken, profile, cb) {
             try {
