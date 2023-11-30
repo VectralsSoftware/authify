@@ -6,18 +6,12 @@ import Facebook from 'passport-facebook'
 const GITHUB_CLIENT_ID = "your id";
 const GITHUB_CLIENT_SECRET = "your id";
 
-const FACEBOOK_APP_ID = "your id";
-const FACEBOOK_APP_SECRET = "your id";
-
-
-
-
 passport.use(
     new Google.Strategy(
         {
             clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-            callbackURL: 'https://authify-yb6j.onrender.com/auth/google/callback',
+            callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
         },
         function (accessToken, refreshToken, profile, cb) {
             try {
@@ -34,7 +28,7 @@ passport.use(
         {
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "https://authify-yb6j.onrender.com/auth/github/callback",
+            callbackURL: `${process.env.BASE_URL}/auth/github/callback`,
         },
         function (accessToken, refreshToken, profile, done) {
             done(null, profile);
@@ -48,7 +42,7 @@ passport.use(
         {
             clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
-            callbackURL: 'https://authify-yb6j.onrender.com/auth/facebook/callback',
+            callbackURL: `${process.env.BASE_URL}/auth/facebook/callback`,
             profileFields: ['id', 'displayName', 'photos', 'email']
         },
         function (accessToken, refreshToken, profile, done) {

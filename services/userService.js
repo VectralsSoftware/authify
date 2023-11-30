@@ -38,8 +38,9 @@ const createUser = async (userData) => {
 
   // Check if user is already registered and exit the process
   const userExists = await findByEmail(user.email);
+
   if (userExists) {
-    throw { code: 11000 };
+    throw { code: 11000, message: 'User already exists' };
   }
 
   // Save the user and return the user saved
